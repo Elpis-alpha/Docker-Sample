@@ -19,6 +19,8 @@
 - Add `predev` script
 - Add `Dockerfile` file
 - Add `.dockerignore` file
+- Use `node:20-buster` if neccessary and install the relevant packages
+- Include ports for `3000` if neccessary
 
 ### Back-end changes
 - Update `tsconfig` file by adding `watchOptions` alongside `compilerOptions`
