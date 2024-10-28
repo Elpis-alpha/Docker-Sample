@@ -1,0 +1,63 @@
+name: my-sample-app
+
+services:
+  back-end:
+    container_name: back-end
+    build:
+      context: ./back-end
+      target: production
+    restart: unless-stopped
+    env_file: ./back-end/.env
+
+    networks:
+      - my-sample-app-network
+    depends_on:
+      - mongo-db
+    
+  front-end:
+    container_name: front-end
+    build:
+      context: ./front-end
+      target: production
+    restart: unless-stopped
+    env_file: ./front-end/.env
+    networks:
+      - my-sample-app-network
+    depends_on:
+      - back-end
+
+  mongo-db:
+    container_name: mongo-db
+    image: mongo:latest
+    # ports: # only for development
+    #   - 27018:27017
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - my-sample-app-network
+    command: mongod --quiet --logpath /dev/null
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/nginx.prod.conf:/etc/nginx/nginx.conf
+    networks:
+      - my-sample-app-network
+    depends_on:
+      - front-end
+      - back-end
+    logging:
+      driver: none
+
+volumes:
+  mongo_data:
+
+networks:
+  my-sample-app-network:
+    driver: bridge
+
+# docker compose -f docker-compose.prod.yml up --build
