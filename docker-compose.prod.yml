@@ -2,7 +2,6 @@ name: my-sample-app
 
 services:
   back-end:
-    container_name: back-end
     build:
       context: ./back-end
       target: production
@@ -15,7 +14,6 @@ services:
       - mongo-db
     
   front-end:
-    container_name: front-end
     build:
       context: ./front-end
       target: production
@@ -27,7 +25,6 @@ services:
       - back-end
 
   mongo-db:
-    container_name: mongo-db
     image: mongo:latest
     # ports: # only for development
     #   - 27018:27017
@@ -39,7 +36,6 @@ services:
 
   nginx:
     image: nginx:latest
-    container_name: nginx
     ports:
       - 80:80
       - 443:443
